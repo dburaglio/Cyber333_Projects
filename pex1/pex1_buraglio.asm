@@ -1,3 +1,9 @@
+;Documentation Statement:
+;	https://www.tutorialspoint.com/assembly_programming/assembly_conditions.htm - accessed Aug 26th, used to understand the different types of jump commands to use (je and jle) in order to understand how they worked and on what conditions they executed a jump
+;	https://www.asciitohex.com/ accessed Aug 26th, used to convert between base 10 numbers and little endian hex for the IP address and Port number
+;	http://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/ - accessed Aug 26th, used for all syscalls to know what variables needed to be loaded into what registers, and what the number of the syscall was
+;	http://man7.org/linux/man-pages/index.html - accessed Aug 26th, used for all syscalls to learn what they did, what their returned on success/failure, and what arguments they take
+;
 section .data
 
 filename: db "/bin/sh" ; filename to reference for opening up a shell
