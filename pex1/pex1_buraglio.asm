@@ -35,7 +35,7 @@ _start.open_socket: ;opens the socket and specifies the port and ip address to c
 	
 	;socaddr in structure
 	mov qword [rsp-8], 0x0		;8 bytes of padding
-	mov dword [rsp-12], 0x0100007f	;inet addr 127.0.0.1 (little endian)
+	mov dword [rsp-12], 0x0100007f	;inet addr 127.0.0.1 (little endian) 0x0100007f
 	mov word [rsp-14], 0xd507	;port 2005 (little endian)
 	mov byte [rsp-16], 0x02		;AF_INET
 	sub rsp, 16			;moves stackpointer to point towards sockaddr_in struct
@@ -46,8 +46,8 @@ _start.open_socket: ;opens the socket and specifies the port and ip address to c
 	mov rsi, rsp	;*uservaddr
 	mov rdx, 16	;addrlen
 	syscall		;executes syscall
-	cmp rax, -1 	;any return value below 0 is an error
-        je _start.badend	;cleanly exits if there is an error
+	cmp rax, 0 	;any return value not 0 is an error
+        jne _start.badend	;cleanly exits if there is an error
 	
 	;call _start.redirect
 	leave
